@@ -1,9 +1,9 @@
 
-export type CollectDestination<T> = Array<T> | Set<T>;
-
 export type InputIterable<T> = Iterable<T> | AsyncIterable<T>;
 
 export type AggregationValue = number | Promise<number>;
+
+export type Collectable<T> = { push(value: T): void } | { add(value: T): void }
 
 export interface RawData<T> extends Iterable<T>, AsyncIterable<T> {
     reverse?: () => IterableIterator<T>
@@ -47,5 +47,5 @@ export interface Iter<T> extends Iterable<T>, AsyncIterable<T> {
 
     toArray(): T[] | Promise<T[]>;
 
-    collect(iterable: Iterable<unknown>): Iterable<T> | Promise<Iterable<T>>;
+    collect(iterable: Collectable<unknown>): Collectable<T | unknown> | Promise<Collectable<T | unknown>>;
 }

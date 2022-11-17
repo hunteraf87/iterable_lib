@@ -1,13 +1,13 @@
 import {
     Iter as AbstractIter,
-    CollectDestination, InputIterable, AggregationValue
+    InputIterable, AggregationValue, Collectable
 } from "./interface";
 import {
     filter, limit, map, from, flat, asyncFlat, flatMap, naturalNumbers, asyncMap,
     asyncFilter,asyncLimit, asyncFrom, asyncFlatMap
 } from "./generators";
 import {sum, avg, max, min, asyncMax, asyncMin, asyncSum, asyncAvg} from "./agregators";
-import {collect} from "./collectors";
+import {asyncCollect, collect} from "./collectors";
 import DataProvider from "./data-provider";
 import {asyncToArray, cast} from './helpers';
 
@@ -92,8 +92,8 @@ export default class Iter<T> implements AbstractIter<T> {
         return this.#data.isIterable() ? max(this.#data) : asyncMax(this.#data);
     }
 
-    collect(to: CollectDestination<unknown>): CollectDestination<T> | Promise<CollectDestination<T>> {
-        return collect(this, to);
+    collect<R>(to: Collectable<R>): Collectable<T | R> | Promise<Collectable<T | R>> {
+        return this.#data.isIterable() ? collect(this, to) : asyncCollect(this, to);
     }
 
     toArray(): T[] | Promise<T[]>{

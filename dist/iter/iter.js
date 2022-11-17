@@ -70,7 +70,7 @@ class Iter {
         return __classPrivateFieldGet(this, _Iter_data, "f").isIterable() ? (0, agregators_1.max)(__classPrivateFieldGet(this, _Iter_data, "f")) : (0, agregators_1.asyncMax)(__classPrivateFieldGet(this, _Iter_data, "f"));
     }
     collect(to) {
-        return (0, collectors_1.collect)(this, to);
+        return __classPrivateFieldGet(this, _Iter_data, "f").isIterable() ? (0, collectors_1.collect)(this, to) : (0, collectors_1.asyncCollect)(this, to);
     }
     toArray() {
         if (__classPrivateFieldGet(this, _Iter_data, "f").isIterable()) {

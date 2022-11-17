@@ -1,18 +1,24 @@
-import {CollectDestination} from "./interface";
+import {Collectable} from "./interface";
 import Iter from "./iter";
 
-export function collect<T>(
+export function collect<T, R>(
     iter: Iter<T>,
-    to: CollectDestination<any>
-): CollectDestination<T> | Promise<CollectDestination<T>> {
-    const array = iter.toArray();
-    if (Array.isArray(to)) {
-        return array;
+    to: Collectable<R>
+): Collectable<T | R> {
+    const addFn: Function = Reflect.get(to, 'push') || Reflect.get(to, 'add')
+    for (const item of iter) {
+        addFn.call(to, item)
     }
-    if (array instanceof Promise) {
-        return new Promise(resolve => {
-            array.then((data) => resolve(new Set(data)))
-        })
+    return to;
+}
+
+export async function asyncCollect<T, R>(
+    iter: Iter<T>,
+    to: Collectable<R>
+): Promise<Collectable<T | R>> {
+    const addFn: Function = Reflect.get(to, 'push') || Reflect.get(to, 'add')
+    for await (const item of iter) {
+        addFn.call(to, item)
     }
-    return new Set(array);
+    return to;
 }
