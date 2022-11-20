@@ -99,20 +99,22 @@ async function* asyncFrom(iterable, from = 0, to) {
     }
 }
 exports.asyncFrom = asyncFrom;
-function* flat(iterable, depth = 1) {
+function* flat(iterable, depth) {
+    const d = depth !== undefined ? depth : 1;
     for (const item of iterable) {
-        if ((0, helpers_1.isIterable)(item) && depth > 0) {
-            yield* flat((0, helpers_1.cast)(item), depth - 1);
+        if ((0, helpers_1.isIterable)(item) && d > 0) {
+            yield* flat((0, helpers_1.cast)(item), d - 1);
             continue;
         }
         yield item;
     }
 }
 exports.flat = flat;
-async function* asyncFlat(iterable, depth = 1) {
+async function* asyncFlat(iterable, depth) {
+    const d = depth !== undefined ? depth : 1;
     for await (const item of iterable) {
-        if ((0, helpers_1.isIterable)(item) && depth > 0) {
-            yield* (0, helpers_1.cast)(flat(item, depth - 1));
+        if ((0, helpers_1.isIterable)(item) && d > 0) {
+            yield* (0, helpers_1.cast)(flat(item, d - 1));
             continue;
         }
         yield item;

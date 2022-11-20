@@ -51,7 +51,7 @@ class Iter {
     from(start = 0, end) {
         return new Iter(__classPrivateFieldGet(this, _Iter_data, "f").isIterable() ? (0, generators_1.from)(__classPrivateFieldGet(this, _Iter_data, "f"), start, end) : (0, generators_1.asyncFrom)(__classPrivateFieldGet(this, _Iter_data, "f"), start, end));
     }
-    flat(depth = 1) {
+    flat(depth) {
         return new Iter(__classPrivateFieldGet(this, _Iter_data, "f").isIterable() ? (0, generators_1.flat)(__classPrivateFieldGet(this, _Iter_data, "f"), depth) : (0, generators_1.asyncFlat)(__classPrivateFieldGet(this, _Iter_data, "f"), depth));
     }
     flatMap(callback) {

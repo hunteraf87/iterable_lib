@@ -1,6 +1,6 @@
 import {
     Iter as AbstractIter,
-    InputIterable, AggregationValue, Collectable
+    InputIterable, AggregationValue, Collectable, FlatIterable
 } from "./interface";
 import {
     filter, limit, map, from, flat, asyncFlat, flatMap, naturalNumbers, asyncMap,
@@ -62,7 +62,7 @@ export default class Iter<T> implements AbstractIter<T> {
         );
     }
 
-    flat(depth = 1) {
+    flat<Depth extends number = 1>(depth?: Depth): Iter<FlatIterable<DataProvider<T>, Depth>> {
         return new Iter(
             this.#data.isIterable() ? flat(this.#data, depth) : asyncFlat(this.#data, depth)
         );

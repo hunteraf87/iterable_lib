@@ -1,4 +1,5 @@
 import {cast, isIterable} from "./helpers";
+import type {FlatIterable} from "./interface";
 
 export function *naturalNumbers(max: number): Generator<number> {
     let i = 1;
@@ -121,27 +122,28 @@ export async function *asyncFrom<T>(
     }
 }
 
-// TODO: определить тип возвращаемого значения
-export function *flat<T extends Iterable<any>>(
+export function *flat<T extends Iterable<any>, Depth extends number = 1>(
     iterable: T,
-    depth= 1
-): Generator<T> {
+    depth?: Depth
+): Generator<FlatIterable<T, Depth>> {
+    const d = depth !== undefined ? depth : 1;
     for (const item of iterable) {
-        if (isIterable(item) && depth > 0) {
-            yield* flat(cast(item), depth - 1);
+        if (isIterable(item) && d > 0) {
+            yield* flat(cast(item), d - 1);
             continue;
         }
         yield item;
     }
 }
 
-export async function *asyncFlat<T extends AsyncIterable<any>>(
+export async function *asyncFlat<T extends AsyncIterable<any>, Depth extends number = 1>(
     iterable: T,
-    depth= 1
-): AsyncGenerator<T> {
+    depth?: Depth
+): AsyncGenerator<FlatIterable<T, Depth>> {
+    const d = depth !== undefined ? depth : 1;
     for await (const item of iterable) {
-        if (isIterable(item) && depth > 0) {
-            yield* cast(flat(item, depth - 1));
+        if (isIterable(item) && d > 0) {
+            yield* cast(flat(item, d - 1));
             continue;
         }
         yield item;
